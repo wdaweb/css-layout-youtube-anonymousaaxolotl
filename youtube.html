@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./all.min.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            background: #0f0f0f;
+            color: #fff;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid #303030;
+        }
+
+        #header {
+            height: 56px;
+            background: #202020;
+            border-bottom: 1px solid #303030;
+            padding: 0 24px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-sizing: border-box;
+        }
+
+        .headergroup {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            font-size: 20px;
+        }
+
+        #header img {
+            height: 28px;
+            width: auto;
+        }
+
+        #search {
+            flex: 0 1 720px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            width: 40%;
+            max-width: 720px;
+            display: flex;
+        }
+
+        #search input {
+            width: 100%;
+            height: 40px;
+            border-radius: 40px 0 0 40px;
+            background: #121212;
+            border: 1px solid #303030;
+            color: #fff;
+            padding: 0 16px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        #search input:focus {
+            outline: 1px solid #1c62b9;
+            border-color: #1c62b9;
+        }
+
+        #search button {
+            height: 40px;
+            border-radius: 0 40px 40px 0;
+            border: 1px solid #303030;
+            background: #222222;
+            padding: 0 24px;
+            color: #fff;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
+        #sidebar {
+            width: 240px;
+            background: #202020;
+            border-right: 1px solid #303030;
+            position: fixed;
+            top: 56px;
+            left: 0;
+            height: calc(100vh - 56px);
+            padding: 12px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        #sidebar a {
+            text-decoration: none;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        #sidebar a:hover {
+            background: #ffffff1a;
+        }
+
+        #sidebar a i {
+            margin-right: 24px;
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        #sidebar .channel-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            margin-right: 24px;
+            object-fit: cover;
+        }
+
+        #categorybar {
+            margin-top: 56px;
+            margin-left: 240px;
+            height: 56px;
+            width: calc(100% - 240px);
+            background: #0f0f0f;
+            border-bottom: 1px solid #303030;
+
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 20px;
+        }
+
+
+        .tag {
+            padding: 6px 12px;
+            background: #272727;
+            color: #fff;
+            white-space: nowrap;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .tag:hover {
+            background: #ffffff1a;
+        }
+
+        #main {
+            margin-left: 240px;
+            /* margin-top: 122px; */
+            padding: 20px;
+            background: rgb(144, 166, 238);
+            transition: margin-left 0.3s;
+        }
+
+
+        #categorybar {
+            margin-top: 56px;
+            margin-left: 240px;
+            height: 56px;
+            width: calc(100% - 240px);
+            background: #0f0f0f;
+            border-bottom: 1px solid #303030;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 20px;
+            transition: margin-left 0.3s, width 0.3s;
+        }
+
+        body.sidebar-collapsed #sidebar {
+            width: 72px;
+        }
+
+        body.sidebar-collapsed #sidebar a span {
+            display: none;
+        }
+
+        body.sidebar-collapsed #sidebar a {
+            justify-content: center;
+        }
+
+        body.sidebar-collapsed #sidebar a i {
+            margin-right: 0;
+        }
+
+        body.sidebar-collapsed #categorybar {
+            margin-left: 72px;
+            width: calc(100% - 72px);
+        }
+
+        body.sidebar-collapsed #main {
+            margin-left: 72px;
+        }
+
+        .channel-link {
+            position: relative;
+        }
+
+        .new-content-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #3ea6ff;
+            border-radius: 50%;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* For Webkit-based browsers (Chrome, Safari, Edge) */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #202020;
+            /* Dark background for the track */
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #555;
+            /* Color of the scroll thumb */
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #777;
+            /* Color of the scroll thumb on hover */
+        }
+
+        /* For Firefox */
+        html {
+            scrollbar-width: thin;
+            scrollbar-color: #555 #202020;
+            /* thumb and track color */
+        }
+
+        #main {
+            margin-left: 240px;
+            padding: 24px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            transition: margin-left 0.3s;
+            background: #0f0f0f;
+            /* Match dark background */
+        }
+
+        .content {
+            width: calc(33.333% - 14px);
+            /* 3 in a row with gap */
+            cursor: pointer;
+        }
+
+        .content a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .pic img {
+            width: 100%;
+            border-radius: 12px;
+        }
+
+        .details {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .channel {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .info {
+            color: #f1f1f1;
+            /* YouTube dark mode text color */
+            padding: 8px 0;
+            font-size: 16px;
+            line-height: 1.4;
+        }
+
+        .time {
+            color: #AAAAAA;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="header">
+        <div class="headergroup">
+            <i class="fa-solid fa-bars" id="sidebar-toggle"></i>
+            <img src="./unnamed.png" alt="">
+        </div>
+        <div id="search">
+            <input type="text" placeholder="搜尋">
+            <button><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+
+    </div>
+    <div id="sidebar">
+        <a href="#"><i class="fa-solid fa-house"></i><span>首頁</span></a>
+        <a href="#"><i class="fa-solid fa-film"></i><span>Shorts</span></a>
+        <a href="#"><i class="fa-solid fa-folder-plus"></i><span>訂閱內容</span></a>
+        <a href="#"><i class="fa-solid fa-circle-play"></i><span>YouTube Music</span></a>
+        <br>
+        <hr>
+        <br>
+        <a href="#"><span style="font-size: 16px;">個人中心<i class="fa-solid fa-angle-right"></i></span></a>
+        <a href="#"><i class="fa-solid fa-clock-rotate-left"></i><span>觀看紀錄</span></a>
+        <a href="#"><i class="fa-solid fa-list-ul"></i><span>播放清單</span></a>
+        <a href="#"><i class="fa-regular fa-circle-play"></i><span>你的影片</span></a>
+        <a href="#"><i class="fa-regular fa-clock"></i><span>稍後觀看</span></a>
+        <a href="#"><i class="fa-regular fa-thumbs-up"></i><span>喜歡的影片</span></a>
+        <a href="#"><i class="fa-solid fa-download"></i><span>已下載內容</span></a>
+        <a href="#"><i class="fa-solid fa-scissors"></i><span>你的短片</span></a>
+        <br>
+        <hr>
+        <br>
+        <a href="#"><span style="font-size: 16px;">訂閱內容<i class="fa-solid fa-angle-right"></i></span></a>
+        <a href="https://www.youtube.com/@ladyflavor_brain" target="_blank"><img class="channel-icon"
+                src="https://yt3.googleusercontent.com/ytc/AIdro_lg5_pNwlcSB47HnxUu_BMH6OEJ_Fu7FxbQEyF3Sc9cXeg=s160-c-k-c0x00ffffff-no-rj"
+                alt=""><span>好味小姐腦波弱</span></a>
+        <a href="https://www.youtube.com/@LadyFlavor" target="_blank"><img class="channel-icon"
+                src="https://yt3.googleusercontent.com/ytc/AIdro_mFW1W2Nyfy9XrGy0uC0EWPZWXb24cACDMam_KhNoNVyUI=s160-c-k-c0x00ffffff-no-rj"
+                alt=""><span>好味小姐 Lady Flavor</span></a>
+        <a href="https://www.youtube.com/@SoloSoloTravel" target="_blank"><img class="channel-icon"
+                src="https://yt3.googleusercontent.com/s9aKCrKPCzjkue_1G7C7zXREKNWUhWVR71a4KbrYr1qoihGkroSaA6LpJO3FnCajSuFsT9_vxA=s160-c-k-c0x00ffffff-no-rj"
+                alt=""><span>Solo Solo Travel</span></a>
+        <a href="https://www.youtube.com/@its_time_to_travel" target="_blank"><img class="channel-icon"
+                src="https://yt3.googleusercontent.com/kJcIvbOvRjEUCY86mD-MyInWtyy3W9GvVwfBpKotGsgBWjnnnajmO_3cjL0zFahaBKhv8kZO=s160-c-k-c0x00ffffff-no-rj"
+                alt=""><span>It's Time to Travel🇯🇵 / 旅する時間</span></a>
+        <a href="https://www.youtube.com/@LESSERAFIM_official" target="_blank"><img class="channel-icon"
+                src="https://yt3.googleusercontent.com/cp_K2YxbIzM1LeY-MxbBbfiBwGVynuZXmnoulzqChU9kQcjEGrLKkiDFvVW5ozY_IH_Lyb0AHRU=s160-c-k-c0x00ffffff-no-rj"
+                alt=""><span>LE SSERAFIM</span></a>
+        <a href="https://www.youtube.com/@milkybokitan6437" target="_blank"><img class="channel-icon"
+                src="https://yt3.googleusercontent.com/7mUsjldx9DWcKHqsNWSuISlQGVoGEp0SdiNOzy-2Y0tjax2KgJHXkxufAp1xi710y1urxOdgJQ=s160-c-k-c0x00ffffff-no-rj"
+                alt=""><span>밀키복이탄이MilkyBokiTan</span></a>
+        <a href="https://www.youtube.com/watch?v=Rk1MYMPDx3s" target="_blank" class="channel-link"><img
+                class="channel-icon"
+                src="https://yt3.googleusercontent.com/zFOaFGJLrjgBoxPKAcstZcITvACGVM53KwJNlqhjG4nStaWELzRWKwMWgpLIJbpgm8C3F_q3=s160-c-k-c0x00ffffff-no-rj"
+                alt=""><span>立法院</span>
+            <div class="new-content-dot"></div>
+        </a>
+        <a href="#"><span style="font-size: 16px;">顯示更多<i class="fa-solid fa-angle-down"></i></span></a>
+        <br>
+        <hr>
+        <br>
+        <a href="#"><i class="fa-solid fa-gear"></i><span>設定</span></a>
+        <a href="#"><i class="fa-solid fa-flag"></i><span>檢舉紀錄</span></a>
+        <a href="#"><i class="fa-solid fa-circle-question"></i><span>說明</span></a>
+        <a href="#"><i class="fa-solid fa-comment-dots"></i><span>提供意見</span></a>
+        <hr>
+    </div>
+    <div id="categorybar">
+        <div class="tag">全部</div>
+        <div class="tag">音樂</div>
+        <div class="tag">遊戲</div>
+        <div class="tag">直播中</div>
+        <div class="tag">Podcast</div>
+        <div class="tag">合輯</div>
+        <div class="tag">動作冒險遊戲</div>
+        <div class="tag">寵物</div>
+        <div class="tag">最新上傳</div>
+        <div class="tag">已觀看</div>
+        <div class="tag">讓你耳目一新</div>
+    </div>
+
+    <div id="main">
+        <div class="content">
+            <a href="https://www.youtube.com/watch?v=bOUndV9IclY" target="_blank">
+                <div class="pic">
+                    <img src="https://img.youtube.com/vi/bOUndV9IclY/maxresdefault.jpg">
+                </div>
+                <div class="details">
+                    <img class="channel"
+                        src="https://yt3.googleusercontent.com/ytc/AIdro_mFW1W2Nyfy9XrGy0uC0EWPZWXb24cACDMam_KhNoNVyUI=s160-c-k-c0x00ffffff-no-rj"
+                        alt="">
+                    <div class="text">
+                        <div class="info">【好味小姐】糟了我好像有點笨！？竟然真的失敗了QAQ｜好味貓日常255</div>
+                        <div class="time">好味小姐 Lady Flavor <br>觀看次數：24萬次 · 1 個月前</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="content">
+            <a href="https://www.youtube.com/watch?v=FM9SemMfknA" target="_blank">
+                <div class="pic">
+                    <img src="https://img.youtube.com/vi/pxBHHHo5kyg/maxresdefault.jpg">
+                </div>
+                <div class="details">
+                    <img class="channel"
+                        src="https://yt3.googleusercontent.com/uYbqpr4Sz6z9Xx4DS2EhGmrH57yh-2c7zOGhmhiWt6wg9TfzfPGe0HFp3WqixQK4EMkkb-bl-g=s160-c-k-c0x00ffffff-no-rj"
+                        alt="">
+                    <div class="text">
+                        <div class="info">Guinea pigs exit and enter the tube.</div>
+                        <div class="time">Bosgoed Animal Paradise <br>觀看次數：1201萬次 · 3 年前</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="content">
+            <a href="https://www.youtube.com/watch?v=Oifg9UqgFpM" target="_blank">
+                <div class="pic">
+                    <img src="https://img.youtube.com/vi/Oifg9UqgFpM/maxresdefault.jpg">
+                </div>
+                <div class="details">
+                    <img class="channel"
+                        src="https://yt3.googleusercontent.com/ytc/AIdro_lg5_pNwlcSB47HnxUu_BMH6OEJ_Fu7FxbQEyF3Sc9cXeg=s160-c-k-c0x00ffffff-no-rj"
+                        alt="">
+                    <div class="text">
+                        <div class="info">耗時40小時！！只搞出一塊焦炭啊！！啊啊啊啊累死我了啊啊啊【腦波弱日常】EP99</div>
+                        <div class="time">
+                            好味小姐腦波弱 <br>觀看次數：76萬次 · 1 個月前</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="content">
+            <a href="https://www.youtube.com/watch?v=YWp42nP6tRA&t=42s" target="_blank">
+                <div class="pic">
+                    <img src="https://img.youtube.com/vi/YWp42nP6tRA/maxresdefault.jpg">
+                </div>
+                <div class="details">
+                    <img class="channel"
+                        src="https://yt3.googleusercontent.com/7mUsjldx9DWcKHqsNWSuISlQGVoGEp0SdiNOzy-2Y0tjax2KgJHXkxufAp1xi710y1urxOdgJQ=s160-c-k-c0x00ffffff-no-rj"
+                        alt="">
+                    <div class="text">
+                        <div class="info">광복아 너 진짜 햇님이 안 때린 거 맞지..?</div>
+                        <div class="time">밀키복이탄이MilkyBokiTan
+                            <br>觀看次數：8.9萬次 · 4 個月前
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="content">
+            <a href="https://www.youtube.com/watch?v=Ja2tTY_BsAk" target="_blank">
+                <div class="pic">
+                    <img src="https://img.youtube.com/vi/Ja2tTY_BsAk/maxresdefault.jpg">
+                </div>
+                <div class="details">
+                    <img class="channel"
+                        src="https://yt3.googleusercontent.com/kJcIvbOvRjEUCY86mD-MyInWtyy3W9GvVwfBpKotGsgBWjnnnajmO_3cjL0zFahaBKhv8kZO=s160-c-k-c0x00ffffff-no-rj"
+                        alt="">
+                    <div class="text">
+                        <div class="info">毛茸茸停不下來的貓咪樂園來啦｜貓咖 Mocha Lounge 池袋東口店</div>
+                        <div class="time">
+                            It's Time to Travel🇯🇵 / 旅する時間
+                            <br>觀看次數：46萬次 · 5 個月前
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="content">
+            <a href="https://www.youtube.com/watch?v=ODLEqLh35T8&t=105s" target="_blank">
+                <div class="pic">
+                    <img src="https://img.youtube.com/vi/ODLEqLh35T8/maxresdefault.jpg">
+                </div>
+                <div class="details">
+                    <img class="channel"
+                        src="https://yt3.googleusercontent.com/kJcIvbOvRjEUCY86mD-MyInWtyy3W9GvVwfBpKotGsgBWjnnnajmO_3cjL0zFahaBKhv8kZO=s160-c-k-c0x00ffffff-no-rj"
+                        alt="">
+                    <div class="text">
+                        <div class="info">貓貓貓🐈！日本四個必訪的貓島</div>
+                        <div class="time">
+                            It's Time to Travel🇯🇵 / 旅する時間
+                            <br>觀看次數：21萬次 · 8 個月前
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="content">
+            <a href="https://www.youtube.com/watch?v=KxT4cR-bXfY" target="_blank">
+                <div class="pic">
+                    <img src="https://img.youtube.com/vi/KxT4cR-bXfY/maxresdefault.jpg">
+                </div>
+                <div class="details">
+                    <img class="channel"
+                        src="https://yt3.ggpht.com/dScJz_WmLASyxS21jOfadOvRZL_OmtEB6MPfr39LT29mm2TOwLT2kxeub00uq-sPnLFse0IY=s400-c-k-c0x00ffffff-no-rj"
+                        alt="">
+                    <div class="text">
+                        <div class="info">日本貓咪天堂飯店 — 40多隻貓和海景溫泉</div>
+                        <div class="time">
+                            Animamille🐰🐱 動物之旅
+                            <br>觀看次數：71萬次 · 3 個月前
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="content">
+            <a href="https://youtube.com/watch?v=EY89M2qRNlc" target="_blank">
+                <div class="pic">
+                    <img src="https://img.youtube.com/vi/EY89M2qRNlc/maxresdefault.jpg">
+                </div>
+                <div class="details">
+                    <img class="channel"
+                        src="https://i.ytimg.com/an/lvAMefbqDLwHDOF40Vjm_Q/featured_channel.jpg?v=65acb41b" alt="">
+                    <div class="text">
+                        <div class="info">
+                            600隻兔子！ 日本著名的兔子島之旅🐰</div>
+                        <div class="time">
+                            Japan Animal Travels
+                            <br>
+                            觀看次數：326萬次 · 1 年前
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="content">
+            <a href="https://youtube.com/watch?v=q3uXXh1sHcI" target="_blank">
+                <div class="pic">
+                    <img src="https://img.youtube.com/vi/q3uXXh1sHcI/maxresdefault.jpg">
+                </div>
+                <div class="details">
+                    <img class="channel"
+                        src="https://yt3.googleusercontent.com/EsHioubXC-qfNdbHyThN7rDTF7rfTzhl5A5u4hHuUAzslx9jgwtxl_2TN4RFqt3hA1jEwAGVgg=s160-c-k-c0x00ffffff-no-rj"
+                        alt="">
+                    <div class="text">
+                        <div class="info">
+                            Baby Penguin Tries To Make Friends | Snow Chick: A Penguin's Tale | BBC Earth</div>
+                        <div class="time">
+
+                            BBC Earth
+
+                            <br>
+
+                            觀看次數：1438萬次 · 3 年前
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+
+
+    <script>
+        document.getElementById('sidebar-toggle').addEventListener('click', function () {
+            document.body.classList.toggle('sidebar-collapsed');
+        });
+    </script>
+</body>
+
+</html>
